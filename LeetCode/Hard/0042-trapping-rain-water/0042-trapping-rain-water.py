@@ -1,16 +1,20 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-
         answer = 0
-        l, r = 0, len(height)-1
-        l_max, r_max = height[l], height[r]
         
-        while l < r:
-            l_max, r_max = max(l_max, height[l]), max(r_max, height[r])
-            if l_max <= r_max:
-                answer += l_max - height[l]
-                l+=1
-            else:
-                answer+= r_max - height[r]
-                r-=1
+        stack = []
+        
+        for i in range(len(height)):
+            
+            while stack and height[i] > height[stack[-1]]:
+                top_idx = stack.pop()
+                
+                if not stack:
+                    break
+                dis = i - stack[-1] -1
+                water = min(height[stack[-1]], height[i]) - height[top_idx]
+                answer += dis*water
+
+            stack.append(i)
         return answer
+            
