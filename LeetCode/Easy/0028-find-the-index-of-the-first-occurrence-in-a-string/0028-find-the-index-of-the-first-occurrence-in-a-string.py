@@ -1,15 +1,30 @@
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
-        l1, l2, p1, p2 = len(haystack), len(needle), 0, 0
-        while p1<l1:
-            if p2==l2:
-                return p1-l2
-            if haystack[p1]==needle[p2]:
-                p2 += 1
+        
+        needle_sum = 0
+        for nee in needle:
+            needle_sum += ord(nee)
+        now_sum = 0
+        st, ed = 0, 0
+        while ed <= len(haystack):
+            if now_sum < needle_sum:
+                if ed == len(haystack): break
+                now_sum+=ord(haystack[ed])
+                ed+=1
+            elif now_sum > needle_sum:
+                now_sum -= ord(haystack[st])
+                st+=1
             else:
-                p1 = p1 - p2
-                p2 = 0
-            p1 += 1
-        if p2==l2:
-            return l1-l2
+                if needle == haystack[st:ed]:
+                    return st
+                elif ed == len(haystack): break
+                else:
+                    now_sum+=ord(haystack[ed])
+                    ed+=1
+
         return -1
+
+        
+        
+
+        return 1
