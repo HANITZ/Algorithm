@@ -1,0 +1,6 @@
+function solution(food_times, k) {
+    var answer = 0;
+    const minFood = Math.min(...food_times)
+    
+    return answer;
+}

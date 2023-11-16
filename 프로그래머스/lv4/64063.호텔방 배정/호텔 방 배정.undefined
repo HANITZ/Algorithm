@@ -1,0 +1,26 @@
+const reservedRoom = new Map()
+
+function solution(k, room_number) {
+    
+    
+    const answer = room_number.map((num)=>{
+        let wantRoom = num
+        const tmpArr = []
+        while(!checkAvailable(wantRoom)){
+            tmpArr.push(wantRoom)
+            wantRoom = reservedRoom.get(wantRoom)
+        }
+        tmpArr.forEach(tmpNum=>{
+            reservedRoom.set(tmpNum, wantRoom+1)
+        })
+        reservedRoom.set(wantRoom, wantRoom+1)
+        
+        return wantRoom
+    })
+    
+    return answer;
+}
+
+function checkAvailable(wantRoom){
+    return !reservedRoom.has(wantRoom)
+}
