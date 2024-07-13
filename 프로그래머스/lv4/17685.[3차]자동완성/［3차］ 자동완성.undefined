@@ -1,0 +1,17 @@
+function solution(words) {
+    var answer = 0;
+    const dic = tmpDic = new Map()
+    
+    words.forEach((word)=>{
+        let prevStr
+        for(const str of word){
+            
+            tmpDic.set(str, new Map({str: null}))
+            tmpDic = tmpDic.get(prevStr)
+            tmpsDic.set({})
+            prevStr = str
+            console.log(tmpDic)
+        }
+    })
+    return answer;
+}

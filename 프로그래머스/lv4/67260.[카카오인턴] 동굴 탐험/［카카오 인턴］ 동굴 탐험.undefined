@@ -1,0 +1,105 @@
+class Node{
+    constructor(val){
+        this.value = val
+        this.next
+    }
+}
+
+class Queue{
+    constructor(){
+        this.size=0
+        this.first=null
+        this.rear=null
+    }
+    add(val){
+        const node = new Node(val)
+        this.size++
+        
+        if(!this.rear){
+            this.rear =this.first= node
+        }else{
+            this.rear.next = node
+            this.rear = node
+        }
+    }
+    
+    popleft(){
+        if(!this.rear) return
+        this.size--
+        
+        const node = this.first
+        
+        if(this.first === this.rear){
+            this.rear = null
+            return node.value
+        }
+        this.first = this.first.next
+        return node.value
+    }
+}
+
+
+
+function solution(n, path, order) {
+    var answer = true;
+    const q = new Queue()
+    
+    
+    const priority = setPriority(order)
+    const reversePriority = setReversePriority(order)
+    const pathInfos = setPathInfos(n, path)
+    const visited = new Array(n).fill(false)
+    q.add(0)
+    visited[0]=true
+
+    while (q.size>0){
+        const parent = q.popleft()
+        
+        
+        pathInfos[parent].forEach((child)=>{
+            if(visited[child]) return
+            if(child in priority){
+                const pre = priority[child]
+                if(!visited[pre]) return
+            }else{
+                visited[child] = true
+                q.add(child)
+                
+                if(child in reversePriority){
+                    visited[reversePriority[child]]=true
+                    q.add(reversePriority[child])
+                }
+                
+            }
+        })
+    }
+    console.log(visited)
+    if(visited.includes(false)){
+        return false
+    }
+    return true;
+}
+
+function setPathInfos(n, path){
+    const arr = new Array(n).fill(0).map(()=>new Array())
+    path.forEach(([a, b])=>{
+        arr[a].push(b)
+        arr[b].push(a)
+    })
+    return arr
+}
+
+function setPriority(order){
+    const dic = {}
+    order.forEach(([first, second])=>{
+        dic[second] = first
+    })
+    return dic
+}
+function setReversePriority(order){
+    const dic = {}
+    order.forEach(([first, second])=>{
+        dic[first] = second
+    })
+    return dic
+}

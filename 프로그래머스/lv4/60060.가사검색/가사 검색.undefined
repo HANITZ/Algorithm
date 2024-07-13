@@ -1,0 +1,54 @@
+class Node{
+    constructor(val){
+        this.value = val
+        this.contained = {}
+    }
+}
+
+class Trie{
+    constructor(){
+        this.root = {}
+    }
+    
+    addWord(word){
+        let dic = this.root
+        const n = word.length
+        for(const str of word){
+            dic[str] = dic[str] ? {...dic[str]} : {contained: {}}
+            dic[str].contained[n] = dic[str].contained[n] ? dic[str].contained[n]+1: 1
+            dic = dic[str]
+        }
+    }
+    
+    search(query){
+        let dic = this.root
+        const n = query.length
+        const keyword = query.replace(/\?/g, "")
+
+        for(const str of keyword){
+            if(!dic[str]) return 0
+            dic=dic[str]
+        }
+        return dic.contained[n] ? dic.contained[n] : 0
+    }
+}
+
+
+
+function solution(words, queries) {
+    const dic = new Trie()
+    const rDic = new Trie()
+    words.forEach(word=>{
+        dic.addWord(word)
+        rDic.addWord(word.split("").reverse().join(""))
+    })
+    
+    return queries.map(query=>{
+        if(query[0] === "?"){
+            return rDic.search(query.split("").reverse().join(""))
+        }
+        return dic.search(query)
+    })
+    
+}
+
